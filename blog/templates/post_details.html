@@ -1,0 +1,59 @@
+
+    {% extends "base.html" %}
+    {% load crispy_forms_tags %}
+    {% block title %} {{ post.title}}{% endblock %}
+    {% block content %}
+    <!-- display number of comment -->
+
+   
+   
+    
+    <h1>{{ post.title}}</h1>
+    {% if post.post_image %}
+    <img src="post.post_image.url" alt="">
+    {% endif %}
+
+    <p class="date">
+        Published {{post.publish}} by {{post.author}}
+    </p>
+    {{ post.body|linebreaks}}
+
+    <div class="container">
+        {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{total_comments|pluralize}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+        </h2>
+        {% endwith %}
+        <!--for ppl -->
+        {% for comment in comments %}
+         <div class="comment">
+            <p class="info">
+        
+                comment {{ forloop.counter }} by {{ comment.name }} {{ comment.created }}
+            </p>
+            {{ comment.body|linebreaks }}
+         </div>
+            {% empty %}
+            <p>
+            There are no comments
+            </p>
+            {%endfor%}
+    
+        {% if new_comment %}
+         <h2>
+            Your comment has been added
+         </h2>
+    
+         {% else %}
+         <h2>
+            Add new comment
+         </h2>
+         <form method="POST">
+            {{ comment_form|crispy }}
+            {% csrf_token %}
+            <p><input type="submit" value="Add comment"></p>
+         </form>
+        {%endif%}
+    </div>
+
+    {% endblock %}
